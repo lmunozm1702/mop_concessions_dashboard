@@ -175,9 +175,56 @@ def tipo_iniciativa_pie_chart(df):
 
     fig.update_layout(
         showlegend=False,
-        title = dict(text = "Tipo de iniciativa"),
+        #title = dict(text = "Tipo de iniciativa"),
+        height=200,
+        margin=dict(t=0, l=0, r=0, b=0)
     )
     
+    st.plotly_chart(fig, use_container_width=True)
+
+def info_presupuesto_kpi(df):
+    print()
+    count_presupuesto = df[(df["UF"] == 0) & (df["USD"] == 0)].value_counts().reset_index(name='count').shape[0]
+    fig = go.Figure()
+
+    fig.add_trace(
+        go.Indicator(
+            mode="delta",
+            value=df.shape[0] - count_presupuesto,
+            #number={"valueformat": ",.0f"},
+            delta={"reference": df.shape[0], "valueformat": ",.0f", "relative": False, 'font': {'size': 18}},
+            domain = {'x': [0, 0.6], 'y': [0, 0.5]},
+            #title={"text": "<span style='font-size:0.8em;color:gray'>Proyectos con información<br>de presupuesto oficial</span>"},
+            
+            
+        )
+    )
+
+    fig.add_trace(
+        go.Indicator(
+            mode="delta",
+            value=df.shape[0] - count_presupuesto,
+            delta={"reference": df.shape[0], "valueformat": ",.2%", "relative": True, 'font': {'size': 18}},
+            #title={"text": "<span style='font-size:0.8em;color:gray'>Proyectos con información<br>de presupuesto oficial</span>"},
+            #number={"valueformat": ",.0f"},
+            domain = {'x': [0.4, 1], 'y': [0, 0.5]},
+        )
+    )
+
+    fig.add_trace(
+        go.Indicator(
+            mode="number",
+            value=df.shape[0] - count_presupuesto,
+            #delta={"reference": df.shape[0], "valueformat": ",.2%", "relative": True},
+            title={"text": "<span style='font-size:0.8em;color:gray'>Proyectos con información<br>de presupuesto oficial</span>"},
+            number={"valueformat": ",.0f"},
+            domain = {'x': [0, 1], 'y': [0, 1]},
+        )
+    )
+    fig.update_layout(
+        margin=dict(t=0, l=0, r=0, b=0),
+        height=250
+    )
     st.plotly_chart(fig, use_container_width=True)
 
 data = load_data()
@@ -185,16 +232,17 @@ df = pd.DataFrame(data)
 
 set_page_config()
 
-status, tipo_iniciativa, yy = st.columns([2, 1, 1], gap="large", vertical_alignment="center")
+status, tipo_iniciativa, yy = st.columns([2, 1, 1], gap="medium", vertical_alignment="center")
 with status:
     st.write("Estado de las concesiones")
     with st.container(border=True, height=250):        
         status_bar_chart(df)
 with tipo_iniciativa:
+    st.write("Tipo de iniciativa")
     with st.container(border=True, height=250):
         tipo_iniciativa_pie_chart(df)
 with yy:
-    st.write("")
-
+    with st.container(border=True):        
+        info_presupuesto_kpi(df)
 
 st.write(df)
