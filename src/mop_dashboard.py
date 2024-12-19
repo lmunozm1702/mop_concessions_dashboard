@@ -53,12 +53,12 @@ def set_page_config():
        MainMenu {visibility: hidden; }
        footer {visibility: hidden;}
        .reportview-container .main .block-container .stMain{
-        padding-top: 0rem;
-        margin-top: 0rem;
+         padding-top: 0rem;
+         margin-top: 0rem;
        }
        .modebar{
-      display: none !important;
-}
+         display: none !important;
+       }
        </style>
        """
     st.markdown(hide_default_format, unsafe_allow_html=True)
@@ -232,7 +232,7 @@ df = pd.DataFrame(data)
 
 set_page_config()
 
-status, tipo_iniciativa, yy = st.columns([2, 1, 1], gap="medium", vertical_alignment="center")
+status, tipo_iniciativa, kpi_ppto = st.columns([2, 1, 1], gap="medium", vertical_alignment="center")
 with status:
     st.write("Estado de las concesiones")
     with st.container(border=True, height=250):        
@@ -241,8 +241,19 @@ with tipo_iniciativa:
     st.write("Tipo de iniciativa")
     with st.container(border=True, height=250):
         tipo_iniciativa_pie_chart(df)
-with yy:
+with kpi_ppto:
     with st.container(border=True):        
         info_presupuesto_kpi(df)
 
+region_ppto, region_count = st.columns([1, 1], gap="medium", vertical_alignment="center")
+with region_ppto:
+    with st.container(border=True, height=250):
+        st.write("Presupuesto por region")
+        df_ppto_uf = df.groupby("region")["UF"].sum().reset_index(name='UF')
+        df_ppto_usd = df.groupby("region")["USD"].sum().reset_index(name='USD')
+        st.write(df_ppto_uf)
+        st.write(df_ppto_usd)
+with region_count:
+    with st.container(border=True, height=250):
+        st.write("Cantidad de proyectos por region")
 st.write(df)
