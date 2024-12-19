@@ -53,12 +53,12 @@ def set_page_config():
        MainMenu {visibility: hidden; }
        footer {visibility: hidden;}
        .reportview-container .main .block-container .stMain{
-        padding-top: 0rem;
-        margin-top: 0rem;
+         padding-top: 0rem;
+         margin-top: 0rem;
        }
        .modebar{
-      display: none !important;
-}
+         display: none !important;
+       }
        </style>
        """
     st.markdown(hide_default_format, unsafe_allow_html=True)
@@ -249,6 +249,10 @@ region_ppto, region_count = st.columns([1, 1], gap="medium", vertical_alignment=
 with region_ppto:
     with st.container(border=True, height=250):
         st.write("Presupuesto por region")
+        df_ppto_uf = df.groupby("region")["UF"].sum().reset_index(name='UF')
+        df_ppto_usd = df.groupby("region")["USD"].sum().reset_index(name='USD')
+        st.write(df_ppto_uf)
+        st.write(df_ppto_usd)
 with region_count:
     with st.container(border=True, height=250):
         st.write("Cantidad de proyectos por region")
