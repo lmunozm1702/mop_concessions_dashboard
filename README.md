@@ -28,6 +28,7 @@ scrapy crawl mop_details_spider -O mop_details_spider.json
 
 ### 2.- ETL
 
+Use requirements.txt to set up the environment
 Execute /notebooks/etl_mop_details.ipynb
 
 ### 3.- Dashboard
